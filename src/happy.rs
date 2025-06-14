@@ -1,18 +1,26 @@
 use std::io;
 use std::iter::{self, FusedIterator};
 use std::net::{IpAddr, TcpStream, ToSocketAddrs};
+#[cfg(not(feature = "single-threaded"))]
 use std::sync::mpsc::channel;
+#[cfg(not(feature = "single-threaded"))]
 use std::thread;
 use std::time::{Duration, Instant};
 
 use url::Host;
 
+#[cfg(not(feature = "single-threaded"))]
 const RACE_DELAY: Duration = Duration::from_millis(200);
 
 /// This function implements a basic form of the happy eyeballs RFC to quickly connect
 /// to a domain which is available in both IPv4 and IPv6. Connection attempts are raced
 /// against each other and the first to connect successfully wins the race.
-pub fn connect(host: &Host<&str>, port: u16, timeout: Duration, deadline: Option<Instant>) -> io::Result<TcpStream> {
+pub fn connect(
+    host: &Host<&str>,
+    port: u16,
+    timeout: Duration,
+    #[allow(unused_variables)] deadline: Option<Instant>,
+) -> io::Result<TcpStream> {
     let addrs: Vec<_> = match *host {
         Host::Domain(domain) => (domain, port).to_socket_addrs()?.collect(),
         Host::Ipv4(ip) => return TcpStream::connect_timeout(&(IpAddr::V4(ip), port).into(), timeout),
@@ -28,11 +36,14 @@ pub fn connect(host: &Host<&str>, port: u16, timeout: Duration, deadline: Option
     let ipv6 = addrs.iter().filter(|a| a.is_ipv6());
     let sorted = intertwine(ipv6, ipv4);
 
+    #[cfg(not(feature = "single-threaded"))]
     let (tx, rx) = channel();
+    #[allow(unused_assignments)]
     let mut first_err = None;
 
     let start = Instant::now();
 
+    #[cfg(not(feature = "single-threaded"))]
     let mut handle_res = |addr, res| match res {
         Ok(sock) => {
             debug!(
@@ -56,6 +67,7 @@ pub fn connect(host: &Host<&str>, port: u16, timeout: Duration, deadline: Option
 
     // This loop will race each connection attempt against others, returning early if a
     // connection attempt is successful.
+    #[cfg(not(feature = "single-threaded"))]
     for &addr in sorted {
         let tx = tx.clone();
 
@@ -77,14 +89,29 @@ pub fn connect(host: &Host<&str>, port: u16, timeout: Duration, deadline: Option
             }
         }
     }
+    #[cfg(feature = "single-threaded")]
+    {
+        for &addr in sorted {
+            debug!("trying to connect to {}", addr);
+            match TcpStream::connect_timeout(&addr, timeout) {
+                Ok(stream) => return Ok(stream),
+                Err(e) => debug!("failed to connect: {}", e),
+            }
+        }
+        first_err = addrs
+            .first()
+            .map(|a| TcpStream::connect_timeout(a, Duration::ZERO).unwrap_err());
+    }
 
     // We must drop this handle to the sender in order to properly disconnect the channel
     // when all the threads are finished.
+    #[cfg(not(feature = "single-threaded"))]
     drop(tx);
 
     // This loop waits for replies from the background threads. It will automatically timeout
     // when the background threads' connection attempts timeout and the senders are dropped.
     // This loop is reached when some of the threads do not complete within the race delay.
+    #[cfg(not(feature = "single-threaded"))]
     for (addr, res) in rx.iter() {
         if let Some(sock) = handle_res(addr, res) {
             return Ok(sock);
