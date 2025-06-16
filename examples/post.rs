@@ -1,7 +1,7 @@
-fn main() -> attohttpc::Result {
+fn main() -> a2httpc::Result {
     env_logger::init();
 
-    let resp = attohttpc::post("https://httpbin.org/post")
+    let resp = a2httpc::post("https://httpbin.org/post")
         .text("hello, world!")
         .send()?;
 

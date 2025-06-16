@@ -7,19 +7,19 @@
 //! asynchronous stack to provide a crate that's as small as possible. Features are provided behind feature flags when
 //! possible to allow users to get just what they need.
 //!
-//! Check out the [repository](https://github.com/sbstp/attohttpc) for more information and examples.
+//! Check out the [repository](https://github.com/sbstp/a2httpc) for more information and examples.
 //!
 //! # Quick start
 //! ```no_run
 //! # #[cfg(feature = "json")]
 //! # use serde_json::json;
 //! # #[cfg(feature = "json")]
-//! # fn main() -> attohttpc::Result {
+//! # fn main() -> a2httpc::Result {
 //! let obj = json!({
 //!     "hello": "world",
 //! });
 //!
-//! let resp = attohttpc::post("https://my-api.org/do/something")
+//! let resp = a2httpc::post("https://my-api.org/do/something")
 //!     .header("X-My-Header", "foo")   // set a header for the request
 //!     .param("qux", "baz")            // set a query parameter
 //!     .json(&obj)?                    // set the request body (json feature required)
@@ -56,16 +56,16 @@
 //! # Activating a feature
 //! To activate a feature, specify it in your `Cargo.toml` file like so
 //! ```toml
-//! attohttpc = { version = "...", features = ["json", "form", ...] }
+//! a2httpc = { version = "...", features = ["json", "form", ...] }
 //! ```
 //!
 
 macro_rules! debug {
-    ($($arg:tt)+) => { log::debug!(target: "attohttpc", $($arg)+) };
+    ($($arg:tt)+) => { log::debug!(target: "a2httpc", $($arg)+) };
 }
 
 macro_rules! warn {
-    ($($arg:tt)+) => { log::warn!(target: "attohttpc", $($arg)+) };
+    ($($arg:tt)+) => { log::warn!(target: "a2httpc", $($arg)+) };
 }
 
 #[cfg(feature = "charsets")]

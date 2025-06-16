@@ -1,9 +1,9 @@
 use std::fs::File;
 
-fn main() -> attohttpc::Result {
+fn main() -> a2httpc::Result {
     env_logger::init();
 
-    let resp = attohttpc::get("https://datasets.imdbws.com/title.basics.tsv.gz").send()?;
+    let resp = a2httpc::get("https://datasets.imdbws.com/title.basics.tsv.gz").send()?;
     println!("Status: {:?}", resp.status());
     println!("Headers:\n{:#?}", resp.headers());
     if resp.is_success() {

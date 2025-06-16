@@ -1,6 +1,6 @@
 use std::net::SocketAddr;
 
-use attohttpc::ErrorKind;
+use a2httpc::ErrorKind;
 use axum::body::Body;
 use axum::response::Response;
 use axum::routing::get;
@@ -40,7 +40,7 @@ async fn make_server() -> Result<u16, anyhow::Error> {
 async fn test_redirection_default() -> Result<(), anyhow::Error> {
     let port = make_server().await?;
 
-    match attohttpc::get(format!("http://localhost:{port}/301")).send() {
+    match a2httpc::get(format!("http://localhost:{port}/301")).send() {
         Err(err) => match err.kind() {
             ErrorKind::TooManyRedirections => (),
             _ => panic!(),
@@ -55,7 +55,7 @@ async fn test_redirection_default() -> Result<(), anyhow::Error> {
 async fn test_redirection_0() -> Result<(), anyhow::Error> {
     let port = make_server().await?;
 
-    match attohttpc::get(format!("http://localhost:{port}/301"))
+    match a2httpc::get(format!("http://localhost:{port}/301"))
         .max_redirections(0)
         .send()
     {
@@ -73,7 +73,7 @@ async fn test_redirection_0() -> Result<(), anyhow::Error> {
 async fn test_redirection_disallowed() -> Result<(), anyhow::Error> {
     let port = make_server().await?;
 
-    let resp = attohttpc::get(format!("http://localhost:{port}/301"))
+    let resp = a2httpc::get(format!("http://localhost:{port}/301"))
         .follow_redirects(false)
         .send()
         .unwrap();
@@ -87,7 +87,7 @@ async fn test_redirection_disallowed() -> Result<(), anyhow::Error> {
 async fn test_redirection_not_redirect() -> Result<(), anyhow::Error> {
     let port = make_server().await?;
 
-    match attohttpc::get(format!("http://localhost:{port}/304")).send() {
+    match a2httpc::get(format!("http://localhost:{port}/304")).send() {
         Ok(_) => (),
         _ => panic!(),
     }

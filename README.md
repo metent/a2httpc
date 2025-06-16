@@ -1,7 +1,7 @@
-# attohttpc
-[Documentation](https://docs.rs/attohttpc) | [Crates.io](https://crates.io/crates/attohttpc) | [Repository](https://github.com/sbstp/attohttpc)
+# a2httpc
+[Documentation](https://docs.rs/a2httpc) | [Crates.io](https://crates.io/crates/a2httpc) | [Repository](https://github.com/sbstp/a2httpc)
 
-## Why attohttpc?
+## Why a2httpc?
 This project's goal is to provide a lightweight and simple HTTP client for the Rust ecosystem. The intended use is for
 projects that have HTTP needs where performance is not critical or when HTTP is not the main purpose of the application.
 Note that the project still tries to perform well and avoid allocation where possible, but stays away from Rust's
@@ -31,7 +31,7 @@ possible to allow users to get just what they need. Here are the goals of the pr
 ## Usage
 See the `examples/` folder in the repository for more use cases.
 ```rust
-let resp = attohttpc::post("https://my-api.com/do/something").json(&request)?.send()?;
+let resp = a2httpc::post("https://my-api.com/do/something").json(&request)?.send()?;
 if resp.is_success() {
     let response = resp.json()?;
     // ...

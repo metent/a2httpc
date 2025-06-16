@@ -27,7 +27,7 @@ use crate::request::{
 };
 use crate::tls::Certificate;
 
-const DEFAULT_USER_AGENT: &str = concat!("attohttpc/", env!("CARGO_PKG_VERSION"));
+const DEFAULT_USER_AGENT: &str = concat!("a2httpc/", env!("CARGO_PKG_VERSION"));
 
 /// `RequestBuilder` is the main way of building requests.
 ///
@@ -114,7 +114,7 @@ impl<B> RequestBuilder<B> {
     ///
     /// # Example
     /// ```
-    /// attohttpc::get("http://foo.bar").params(&[("p1", "v1"), ("p2", "v2")]);
+    /// a2httpc::get("http://foo.bar").params(&[("p1", "v1"), ("p2", "v2")]);
     /// ```
     pub fn params<P, K, V>(mut self, pairs: P) -> Self
     where
