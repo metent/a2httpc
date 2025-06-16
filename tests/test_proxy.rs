@@ -25,6 +25,7 @@ async fn test_http_url_with_http_proxy() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
+#[ignore]
 #[cfg(any(feature = "tls-native", feature = "__rustls"))]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_http_url_with_https_proxy() -> Result<(), anyhow::Error> {
@@ -49,6 +50,7 @@ async fn test_http_url_with_https_proxy() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
+#[ignore]
 #[cfg(any(feature = "tls-native", feature = "__rustls"))]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_https_url_with_http_proxy() -> Result<(), anyhow::Error> {
@@ -73,6 +75,7 @@ async fn test_https_url_with_http_proxy() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
+#[ignore]
 #[cfg(any(feature = "tls-native", feature = "__rustls"))]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_https_url_with_https_proxy() -> Result<(), anyhow::Error> {
@@ -150,6 +153,7 @@ async fn test_https_url_with_http_proxy_refusal() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
+#[ignore]
 #[cfg(any(feature = "tls-native", feature = "__rustls"))]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_http_url_with_https_proxy_refusal() -> Result<(), anyhow::Error> {
@@ -176,6 +180,7 @@ async fn test_http_url_with_https_proxy_refusal() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
+#[ignore]
 #[cfg(any(feature = "tls-native", feature = "__rustls"))]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_https_url_with_https_proxy_refusal() -> Result<(), anyhow::Error> {

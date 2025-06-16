@@ -123,7 +123,7 @@ pub fn connect(
         start.elapsed().as_millis()
     );
 
-    Err(first_err.unwrap_or_else(|| io::Error::new(io::ErrorKind::Other, "no DNS entries found")))
+    Err(first_err.unwrap_or_else(|| io::Error::other("no DNS entries found")))
 }
 
 fn intertwine<T, A, B>(mut ita: A, mut itb: B) -> impl Iterator<Item = T>
