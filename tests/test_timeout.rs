@@ -14,13 +14,13 @@ fn request_fails_due_to_read_timeout() {
         thread::sleep(Duration::from_millis(500));
     });
 
-    let result = attohttpc::get(format!("http://localhost:{port}"))
+    let result = a2httpc::get(format!("http://localhost:{port}"))
         .read_timeout(Duration::from_millis(100))
         .send();
 
     match result {
         Err(err) => match err.kind() {
-            attohttpc::ErrorKind::Io(err) => match err.kind() {
+            a2httpc::ErrorKind::Io(err) => match err.kind() {
                 io::ErrorKind::TimedOut | io::ErrorKind::WouldBlock => (),
                 err => panic!("Unexpected I/O error: {:?}", err),
             },
@@ -41,13 +41,13 @@ fn request_fails_due_to_timeout() {
         thread::sleep(Duration::from_millis(500));
     });
 
-    let result = attohttpc::get(format!("http://localhost:{port}"))
+    let result = a2httpc::get(format!("http://localhost:{port}"))
         .timeout(Duration::from_millis(100))
         .send();
 
     match result {
         Err(err) => match err.kind() {
-            attohttpc::ErrorKind::Io(err) => match err.kind() {
+            a2httpc::ErrorKind::Io(err) => match err.kind() {
                 io::ErrorKind::TimedOut => (),
                 err => panic!("Unexpected I/O error: {:?}", err),
             },

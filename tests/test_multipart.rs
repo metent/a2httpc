@@ -45,18 +45,18 @@ async fn start_server() -> (u16, Receiver<Vec<Part>>) {
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn test_multipart_default() -> attohttpc::Result<()> {
-    let file = attohttpc::MultipartFile::new("file", b"abc123")
+async fn test_multipart_default() -> a2httpc::Result<()> {
+    let file = a2httpc::MultipartFile::new("file", b"abc123")
         .with_type("text/plain")?
         .with_filename("hello.txt");
-    let form = attohttpc::MultipartBuilder::new()
+    let form = a2httpc::MultipartBuilder::new()
         .with_text("Hello", "world!")
         .with_file(file)
         .build()?;
 
     let (port, recv) = start_server().await;
 
-    attohttpc::post(format!("http://localhost:{port}/multipart"))
+    a2httpc::post(format!("http://localhost:{port}/multipart"))
         .body(form)
         .send()?
         .text()?;
